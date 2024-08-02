@@ -10,23 +10,61 @@
 
 import random
 
+# 맞히는 숫자 설정
 com_num = random.randrange(1, 101)
 
-for i in range(1, 6):
-    peo_num = int(input("숫자를 입력해주세요 : "))
+# life 개수 설정
+life = 5
 
-    if (peo_num == com_num):
+# level 설정
+level = 1
+
+# 현재 위치
+def total(life, level):
+    print("life : {}", life)
+    print("level : {}", level)
+
+# 입력한 숫자 검증
+def number_check(peo_num, com_num, life, level):
+    if peo_num == com_num:  # 추측한 숫자가 맞았을 경우
         print("성공!!!")
-        break
+        level = level + 1
+        return retry()
 
-    elif (i == 5):
+    elif life == 0:  # life 를 다 잃었을 경우
         print("실패!!!")
-        break
+        return retry()
 
-    else:
-        if (peo_num > com_num):
+    else:  # 추측한 숫자가 틀렸을 경우
+        if peo_num > com_num:
             print("down!")
         else:
             print("up!")
 
-        print("{}번의 기회가 남았습니다 다시 입력해주세요.".format(5 - i))
+
+# 재도전 할건지 묻는 함수
+def retry():
+    retry_answer = input("재도전 하시겠습니까? y/n")
+    if retry_answer == "y":
+        total(level, life)
+        return game(com_num, life)
+
+    elif retry_answer == "n":
+        total(level, life)
+        exit()
+
+    else:
+        print("다시 입력해주세요")
+        return retry()
+
+
+def game(com_num, life):
+    for i in range(1, life + 1):
+        peo_num = int(input("숫자를 입력해주세요 : "))
+
+        number_check(peo_num, com_num, life)
+
+        print("\nlife = {}".format(life - i))
+
+
+game(com_num, life)
